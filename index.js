@@ -27,7 +27,7 @@ bot.start(ctx => {
                     'X-Yandex-API-Key': `${process.env.YANDEX_API}`
                 }
         };
-        fetch('https://api.weather.yandex.ru/v2/informers?lat=55.75396&lon=37.620393', options)
+        fetch('https://api.weather.yandex.ru/v2/informers?lat=59.938951&lon=30.315635', options)
             .then(response => response.json())
             .then(data => {
                 //console.log(data);
@@ -172,17 +172,17 @@ bot.action('seeReg', async ctx=> {
             console.log(error);
             }
     })
-bot.action('addReg', async ctx => {
+bot.action('addReg', ctx => {
     try {
-        await ctx.answerCbQuery()
-        if(db.some(item => item.date === `${fishData.date.slice(0, 10).split('-').reverse().join('.')}`)){
-            ctx.reply('Запись на сегодня уже была добавлена! Перезапустите бота!');
-        }
-        else {
-            await ctx.replyWithHTML(`Отлично! Запись добавлена в дневник. Ждем вас завтра!`)
+            ctx.answerCbQuery()
+        // if(db.some(item => item.date === `${fishData.date.slice(0, 10).split('-').reverse().join('.')}`)){
+        //     ctx.reply('Запись на сегодня уже была добавлена! Перезапустите бота!');
+        // }
+        // else {
+            ctx.replyWithHTML(`Отлично! Запись добавлена в дневник. Ждем вас завтра!`)
             db.push(fishData)
-            // console.log(db, db.length)
-            }
+            console.log(db, db.length)
+        // }
         } 
         catch (error) {
             console.log(error);
