@@ -102,8 +102,8 @@
             }
 
         };
-        req.open("GET", "https://api.jsonbin.io/v3/b/628274e7019db46796a1640b/latest", true);
-        req.setRequestHeader("X-Master-Key", "$2b$10$IjBKe8O8QRFhLDZk4nhPxucP5CF0HV4b0OV/iD3CP8yZ6eYIIJqg.");
+        req.open("GET", "https://api.jsonbin.io/v3/b/<BIN_KEY>/latest", true);
+        req.setRequestHeader("X-Master-Key", "<API_KEY>");
         req.send();
     </script>
 </body>
