@@ -1,8 +1,8 @@
-require('dotenv').config()
+import {} from 'dotenv/config'
 
 
 // функция для определения направления ветра по буквенным обозначениям (RU)
-module.exports.getDirection = function(d) {
+export const getDirection = function(d) {
     switch(d){
         case 'nw': 
             return  `Северо-западное`
@@ -35,7 +35,7 @@ module.exports.getDirection = function(d) {
 } 
 
 // функция для определения фазы луны (RU)
-module.exports.getMoonPhase = function(code) {  
+export const getMoonPhase = function(code) {  
     switch(code){
         case 0: 
             return `Полнолуние`
@@ -89,7 +89,7 @@ module.exports.getMoonPhase = function(code) {
 } 
 
 // функция для опреления цыета по HEX коду (RU)
-module.exports.getNameColor = function(code){
+export const getNameColor = function(code){
     switch (code) {
         case '#FF0000':
             return `Красный 💔`
@@ -203,7 +203,7 @@ module.exports.getNameColor = function(code){
 //     // 7 => Старая луна
 // }
 
-module.exports.sendData = async (url, data) => {
+export const sendData = async (url, data) => {
     const response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -216,11 +216,11 @@ module.exports.sendData = async (url, data) => {
     return await response.json()
 }
 
-module.exports.pushData = (arr, data) => {
+export const pushData = (arr, data) => {
     arr.push(data)
 }
 
-module.exports.putBinData = (req, data) => {
+export const putBinData = (req, data) => {
     req.open("PUT", `https://api.jsonbin.io/v3/b/${process.env.BIN_TOKEN}`, true);
     req.setRequestHeader("Content-Type", "application/json");
     req.setRequestHeader("X-Master-Key", `${process.env.BASE_TOKEN}`);

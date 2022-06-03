@@ -69,11 +69,11 @@
         const table = document.querySelector('.table');
         const tbody = document.querySelector(".myTBody")
         const data = document.querySelector('.data');
-        //data.innerHTML = '<td>5</td>'
-        let req = new XMLHttpRequest();
-        req.onreadystatechange = () => {
-            if (req.readyState == XMLHttpRequest.DONE) {
-                JSON.parse(req.responseText).record.forEach(element => {
+
+        fetch('<LINK>')
+            .then(response => response.json())
+            .then(data => {
+                    data.forEach(element => {
                         const tr = document.createElement('tr')
                         tbody.append(tr);
                         tr.classList.add('data');
@@ -96,15 +96,8 @@
                                 tr.appendChild(td);
                             }
                         }
-                    // const objArr = Object.values(element)
-                    // tbody.insertAdjacentHTML("beforeend", `<tr class = "data"></tr>`)
-                });
-            }
-
-        };
-        req.open("GET", "https://api.jsonbin.io/v3/b/628274e7019db46796a1640b/latest", true);
-        req.setRequestHeader("X-Master-Key", "$2b$10$IjBKe8O8QRFhLDZk4nhPxucP5CF0HV4b0OV/iD3CP8yZ6eYIIJqg.");
-        req.send();
+            })
+        })
     </script>
 </body>
 </html>

@@ -1,23 +1,28 @@
-const {
-    Telegraf, Markup
-} = require('telegraf');
-require('dotenv').config()
-const text = require('./const');
-const func = require('./functions');
-const fs = require('fs');
-require('cross-fetch/polyfill')
-require('node-fetch')
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-
-
+import { Telegraf, Markup } from "telegraf";
+import {} from 'dotenv/config'
+import express from 'express'
+import * as func from './functions.js'
+import cors from 'cors'
+import fetch from 'cross-fetch'
+import 'node-fetch'
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-let req = new XMLHttpRequest();
-
 
 // global variabls 
-let db = [];
-let fishData = {}; 
+let fishJournal = [];
+let fishData = {};
+
+
+const app = express();
+app.use(cors())
+app.use(express.json())
+
+app.get('/', (req, res) => {
+    res.json(fishJournal)
+});
+app.listen(3000);
+
+
 
 bot.start(ctx => {
         try {
@@ -172,18 +177,17 @@ bot.action('seeReg', async ctx=> {
             console.log(error);
             }
     })
-bot.action('addReg', ctx => {
+bot.action('addReg', async ctx => {
     try {
-            ctx.answerCbQuery()
-        // if(db.some(item => item.date === `${fishData.date.slice(0, 10).split('-').reverse().join('.')}`)){
-        //     ctx.reply('Запись на сегодня уже была добавлена! Перезапустите бота!');
-        // }
-        // else {
-            ctx.replyWithHTML(`Отлично! Запись добавлена в дневник. Ждем вас завтра!`)
-            db.push(fishData)
-            console.log(db, db.length)
-        // }
-        } 
+        ctx.answerCbQuery()
+        if(fishJournal.some(item => item.date === `${fishData.date.slice(0, 10).split('-').reverse().join('.')}`)){
+            ctx.reply('Запись на сегодня уже была добавлена! Перезапустите бота!');
+        }
+        else {
+            await fishJournal.push(fishData)
+            await ctx.replyWithHTML(`Отлично! Запись добавлена в дневник. Ждем вас завтра!`, ctx => {})
+        }
+    } 
         catch (error) {
             console.log(error);
             }
@@ -193,19 +197,12 @@ bot.action('addReg', ctx => {
 
 bot.command('mynotes', async ctx => {
         try {
-            req.onreadystatechange = () => {
-            if (req.readyState == XMLHttpRequest.DONE) {
-                console.log(req.responseText);
-            }
-            }
-            req.open("PUT", `https://api.jsonbin.io/v3/b/${process.env.BIN_TOKEN}`, true);
-            req.setRequestHeader("Content-Type", "application/json");
-            req.setRequestHeader("X-Master-Key", `${process.env.BASE_TOKEN}`);
-            req.send(JSON.stringify(db));
             await ctx.telegram.sendDocument(ctx.from.id, {
                         source: './index.html',
                         filename: 'index.html'
                     }).catch(function(error){ console.log(error); });
+
+            
             // console.log(JSON.stringify(db))
         }
         catch (error) {
